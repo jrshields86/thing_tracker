@@ -20,10 +20,31 @@ const init = async()=> {
   await client.connect();
   console.log('connected to database');
   const SQL = `
+  
+  DROP TABLE IF EXISTS things;
+  DROP TABLE IF EXISTS users;  
     CREATE TABLE users(
-      id SERIAL PRIMARY KEY
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100)
     );
-  `;
+    CREATE TABLE things(
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100) UNIQUE,
+      user_id INTEGER REFERENCES users(id)
+    );
+    INSERT INTO users(name) VALUES ('moe');
+    INSERT INTO users(name) VALUES ('lucy');
+    INSERT INTO users(name) VALUES ('curly');
+    INSERT INTO users(name) VALUES ('ethyl');    
+    INSERT INTO things(name, user_id) VALUES (
+      'foo',
+      (SELECT id FROM users WHERE name='moe'));
+      INSERT INTO things(name, user_id) VALUES (
+        'bar',
+        (SELECT id FROM users WHERE name='moe'));
+        INSERT INTO things(name) VALUES('bazz');
+        INSERT INTO things(name) VALUES('qug');  
+        `;
   await client.query(SQL);
   console.log('create your tables and seed data');
 
