@@ -1,5 +1,5 @@
 const pg = require('pg');
-const client = new pg.Client('postgres://localhost/fullstack_template_db');
+const client = new pg.Client('postgres://localhost/thing_tracker_db');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -20,8 +20,11 @@ const init = async()=> {
   await client.connect();
   console.log('connected to database');
   const SQL = `
-    SQL SETUP AND SEED
+    CREATE TABLE users(
+      id SERIAL PRIMARY KEY
+    );
   `;
+  await client.query(SQL);
   console.log('create your tables and seed data');
 
   const port = process.env.PORT || 3000;
