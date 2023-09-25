@@ -24,6 +24,13 @@ const App = ()=> {
     fetchThings();
   }, []);
 
+  const addOwner =async (thing, user) => {
+    thing = {...thing, user_id: user.id};
+    const response = await axios.put(`/api/things/${thing.id}`, thing);
+    thing = response.data;
+    setThings(things.map(_thing => _thing.id === thing.id ? thing : _thing))
+  }
+
   return (
     <div>
     <h1>Thing Tracker</h1>
@@ -58,6 +65,13 @@ const App = ()=> {
                         return (
                           <li key={user.id} className={ thing.user_id === user.id ? 'owner': ''}>
                             { user.name }
+                            {
+                              thing.user_id === user.id ? (
+                                <button>Remove Owner</button>
+                              ):(
+                                <button onClick={ () => addOwner(thing, user)}>Add</button>
+                              )
+                            }
                           </li>
                         )
                       })
